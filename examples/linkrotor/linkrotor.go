@@ -6,8 +6,6 @@ import (
 	"honnef.co/go/js/dom"
 )
 
-type Page struct{}
-
 func ListPages() *js.Object {
 	return m.Request(js.M{
 		"method": "GET",
@@ -15,42 +13,46 @@ func ListPages() *js.Object {
 	})
 }
 
-type Demo struct {
-	p *js.Object
-}
-
-func (d *Demo) Controller() map[string]interface{} {
-	d.p = ListPages()
+func Controller(this *js.Object, args []*js.Object) interface{} {
+	var p = ListPages()
 	return js.M{
-		"pages": d.p,
+		"pages": p,
 		"rotate": func() {
-			d.p.Invoke().Call("push", d.p.Invoke().Call("shift"))
+			p.Invoke().Call("push", p.Invoke().Call("shift"))
 		},
 	}
 }
 
-func (d Demo) View() m.VirtualElement {
-	var log = js.Global.Get("console").Get("log")
-
+func View(this *js.Object, controller []*js.Object) interface{} {
+	pages := controller[0].Get("pages")
 	children := js.S{}
-	log.Invoke(d.p.Invoke())
-	for _, rawPage := range d.p.Invoke().Interface().(js.S) {
-		page := rawPage.(js.Object)
+	p := pages.Invoke()
+	for i := 0; i < p.Length(); i++ {
+		page := p.Index(i)
 		children = append(
 			children,
-			m.M("a", js.M{
-				"href": page.Get("url")}, page.Get("title")))
+			m.M(
+				"a",
+				js.M{
+					"href": page.Get("url").String()},
+				page.Get("title").String()))
 	}
 
-	return m.M("div", nil, children...)
+	children = append(children,
+		m.M(
+			"button",
+			js.M{"onclick": controller[0].Get("rotate")},
+			"Rotate links"))
+
+	return m.M("div", js.M{}, children...)
 }
 
 func main() {
-	demo := Demo{}
-	d.Controller()
-	js.Global.Get("console").Get("dir").Invoke(demo)
-
-	m.Render(
+	x := js.Global.Get("Object").New()
+	x.Set("view", js.MakeFunc(View))
+	x.Set("controller", js.MakeFunc(Controller))
+	m.Mount(
 		dom.GetWindow().Document().GetElementByID("example"),
-		m.M("input", nil))
+		x,
+	)
 }

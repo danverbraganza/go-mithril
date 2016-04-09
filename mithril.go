@@ -12,8 +12,6 @@ import (
 
 var m *js.Object
 
-type VirtualElement *js.Object
-
 func init() {
 	m = js.Global.Get("m")
 }
@@ -22,22 +20,26 @@ func Version() string {
 	return m.Call("version").String()
 }
 
-func M(selector string, attrs js.M, children ...interface{}) VirtualElement {
+func M(selector string, attrs js.M, children ...interface{}) *js.Object {
 	if attrs == nil {
-		return m.Invoke(selector, children)
+		attrs = js.M{}
 	}
-	return m.Invoke(selector, attrs, children)
+	x := js.Global.Get("Array").New()
+	for _, c := range children {
+		x.Call("push", c)
+	}
+	return m.Invoke(selector, attrs, x)
 }
 
 // Render renders a given virtual element cell to a DOM Node. Will not force
 // recreation of elements by default.
-func Render(root dom.Node, cell VirtualElement) {
+func Render(root dom.Node, cell *js.Object) {
 	m.Call("render", root.Underlying(), js.InternalObject(cell))
 }
 
 // RenderWithForce is the same as Render, but accepts an additional parameter,
 // forceRecreation.
-func RenderWithForce(root dom.Node, cell VirtualElement, forceRecreation bool) {
+func RenderWithForce(root dom.Node, cell *js.Object, forceRecreation bool) {
 	m.Call("render", root.Underlying(), js.InternalObject(cell), forceRecreation)
 }
 
@@ -60,6 +62,7 @@ func Component(component *js.Object, args ...*js.Object) *js.Object {
 
 // Mount "hooks up" an element for continuous rendering at a target node.
 // This interface is pretty clunky right now until I figure out what is needed.
+// Should be an interface, with view and controller.
 func Mount(root dom.Node, element *js.Object) *js.Object {
 	return m.Call("mount", root.Underlying(), element)
 }
