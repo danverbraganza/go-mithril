@@ -63,7 +63,7 @@ func Component(component *js.Object, args ...*js.Object) *js.Object {
 // Mount "hooks up" an element for continuous rendering at a target node.
 // This interface is pretty clunky right now until I figure out what is needed.
 // Should be an interface, with view and controller.
-func Mount(root dom.Node, element *js.Object) *js.Object {
+func Mount(root dom.Node, element interface{}) *js.Object {
 	return m.Call("mount", root.Underlying(), element)
 }
 

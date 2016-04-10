@@ -18,41 +18,44 @@ func Controller(this *js.Object, args []*js.Object) interface{} {
 	return js.M{
 		"pages": p,
 		"rotate": func() {
-			p.Invoke().Call("push", p.Invoke().Call("shift"))
+			actual := p.Invoke()
+			// TODO: Do this is Go?
+			actual.Call("push", actual.Call("shift"))
 		},
 	}
 }
 
-func View(this *js.Object, controller []*js.Object) interface{} {
-	pages := controller[0].Get("pages")
+// View is a function that takes a controller as its first argument, and returns
+// a view. Unfortunately, due to the need for compatibility with MakeFunc, the
+// signature is poor.
+func View(this *js.Object, args []*js.Object) interface{} {
+	controller := args[0]
+	pages := controller.Get("pages")
 	children := js.S{}
 	p := pages.Invoke()
 	for i := 0; i < p.Length(); i++ {
 		page := p.Index(i)
 		children = append(
 			children,
-			m.M(
-				"a",
-				js.M{
-					"href": page.Get("url").String()},
+			m.M("a", js.M{
+				"href": page.Get("url").String()},
 				page.Get("title").String()))
 	}
 
 	children = append(children,
-		m.M(
-			"button",
-			js.M{"onclick": controller[0].Get("rotate")},
+		m.M("button", js.M{
+			"onclick": controller.Get("rotate")},
 			"Rotate links"))
 
 	return m.M("div", js.M{}, children...)
 }
 
 func main() {
-	x := js.Global.Get("Object").New()
-	x.Set("view", js.MakeFunc(View))
-	x.Set("controller", js.MakeFunc(Controller))
 	m.Mount(
 		dom.GetWindow().Document().GetElementByID("example"),
-		x,
+		// TODO(danver): Extract this to a type.
+		js.M{
+			"view":       js.MakeFunc(View),
+			"controller": js.MakeFunc(Controller)},
 	)
 }
