@@ -18,9 +18,9 @@ func Controller(this *js.Object, args []*js.Object) interface{} {
 	return js.M{
 		"pages": p,
 		"rotate": func() {
-			actual := p.Invoke()
-			// TODO: Do this is Go?
-			actual.Call("push", actual.Call("shift"))
+			actual := p.Invoke().Interface().([]interface{})
+			rest, head := actual[:1], actual[1:]
+			p.Invoke(append(head, rest...))
 		},
 	}
 }
@@ -51,9 +51,9 @@ func View(this *js.Object, args []*js.Object) interface{} {
 }
 
 func main() {
+	example := dom.GetWindow().Document().GetElementByID("example")
 	m.Mount(
-		dom.GetWindow().Document().GetElementByID("example"),
-		// TODO(danver): Extract this to a type.
+		example,
 		js.M{
 			"view":       js.MakeFunc(View),
 			"controller": js.MakeFunc(Controller)},
