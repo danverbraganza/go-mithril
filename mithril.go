@@ -89,8 +89,8 @@ func RedrawStrategy(strategy ...string) string {
 // WithAttr is an event handler factory. It returns a method that can be bound
 // to a DOM element's event listener, to implement databinding from the view to
 // the model.
-func WithAttr(prop, withAttrCallback, callbackThis *js.Object) *js.Object {
-	return m.Call("withAttr", prop, withAttrCallback, callbackThis)
+func WithAttr(args ...interface{}) *js.Object {
+	return m.Call("withAttr", args...)
 }
 
 // RouteDefine allows you to define the routes for a Single-Page Application.
