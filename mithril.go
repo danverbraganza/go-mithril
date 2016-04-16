@@ -35,16 +35,10 @@ func M(selector string, attrs js.M, children ...interface{}) *js.Object {
 	return m.Invoke(selector, attrs, x)
 }
 
-// Render renders a given virtual element cell to a DOM Node. Will not force
-// recreation of elements by default.
-func Render(root dom.Node, cell *js.Object) {
-	m.Call("render", root, js.InternalObject(cell))
-}
-
-// RenderWithForce is the same as Render, but accepts an additional parameter,
-// forceRecreation.
-func RenderWithForce(root dom.Node, cell *js.Object, forceRecreation bool) {
-	m.Call("render", root, js.InternalObject(cell), forceRecreation)
+// Render renders a given virtual element cell to a DOM Node. Iff force is true,
+// this will force the recreation of elements.
+func Render(root dom.Node, cell *js.Object, force bool) {
+	m.Call("render", root, cell, force)
 }
 
 // Trust annotates a string as trusted, so that HTML entities will not be escaped.
