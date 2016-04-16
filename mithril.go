@@ -37,7 +37,7 @@ func M(selector string, attrs js.M, children ...interface{}) *js.Object {
 
 // Render renders a given virtual element cell to a DOM Node. Iff force is true,
 // this will force the recreation of elements.
-func Render(root dom.Node, cell *js.Object, force bool) {
+func Render(root dom.Node, cell interface{}, force bool) {
 	m.Call("render", root, cell, force)
 }
 
