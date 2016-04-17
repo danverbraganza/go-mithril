@@ -18,13 +18,14 @@ to employ in Go.
 
 To determine if go-mithril is a good fit for your project, ask if you have:
 
-* Tolerance for lower performance introduced by Gopherjs and having to go
-  through a translation.
-* Developers with at least a passing knowledge of how mithril itself works,
-* Developers with at least a passing knowledge of front-end technologies, and finally,
 * Developers with a strong preference for writing Go over Javascript.
+* Tolerance for slightly lower performance introduced by Gopherjs and having to
+  go through a translation.
+* Developers with at least a passing knowledge of front-end technologies, and
+  finally,
+* Developers with at least a passing knowledge of how mithril itself works.
 
-Perhaps as this project ages, sufficient documentation and abstraction solidity
+Perhaps as this project matures, sufficient documentation and abstraction solidity
 will mean that knowledge of mithril itself will not be necessary.
 
 ### How mature is this project?
@@ -69,12 +70,14 @@ making an asynchronous request, and binding a view to a model.
 ### Moria
 
 The bindings provided in package `mithril` do not provide for an idiomatic Go
-approach to crafting front-end code. The next step of this project is to create
-the subpackage moria, which allows user to work with types and functions that
-more closely suit Go.
+approach to crafting front-end code. For a more pleasant approach, use *moria*,
+a set of strongly typed functions, types and interfaces you implement to get the
+same behaviour.
+
+At present, Moria is only partially implemented.
 
 ### Can I contribute?
-> *Yes, but*
+> *Yes, but...*
 
 At the moment, I'm really enjoying lone-wolfing on the project in my spare time.
 Due to the constraints of professional committments I fear I will not be able to
@@ -84,7 +87,8 @@ be gratefully accepted as I able.
 ### Changelog
 
 2016-04-16: Scrapped RenderWithForce in favour of adding the field to render.
-Loosened some types in Render. Started work on moria.
+Loosened some types in Render. Started work on moria, and brought it to enough
+completeness of features so that the Todo app tutorial could be built.
 
 2016-04-12: The basic bindings to Mithril have been completed. However, with no
 tests, it's very hard to determine if it is correct.
