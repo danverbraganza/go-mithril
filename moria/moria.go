@@ -17,6 +17,14 @@ type VirtualElement struct {
 	*js.Object
 }
 
+type F func(*[]View)
+
+func (f F) View() interface{} {
+	children := []View{}
+	f(&children)
+	return children
+}
+
 // Render renders things
 func Render(root dom.Node, cell View, force bool) {
 	m.Render(root, cell.View(), force)
@@ -54,7 +62,6 @@ func Version() string {
 // representation, and then calls it.
 func Mount(root dom.Node, component Component) {
 	fauxComponent := js.M{
-		"init":       component.Init,
 		"view":       component.View,
 		"controller": component.Controller,
 	}

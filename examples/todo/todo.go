@@ -39,9 +39,6 @@ type TodoComponent struct {
 	ViewModel TodoVM
 }
 
-// Init is a Noop.
-func (TodoComponent) Init() {}
-
 // For this component, the controller is the same.
 // This is probably bad.
 func (t *TodoComponent) Controller() moria.Controller {
