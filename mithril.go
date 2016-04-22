@@ -118,6 +118,10 @@ func Route() string {
 	return m.Call("route").String()
 }
 
+func RouteConfig() *js.Object {
+	return m.Get("route")
+}
+
 // BuildQueryString serializes an object into its URI encoded querystring
 // representation.
 func BuildQueryString(object *js.M) string {

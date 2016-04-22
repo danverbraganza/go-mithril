@@ -65,6 +65,16 @@ func Mount(root dom.Node, component Component) {
 		"view":       component.View,
 		"controller": component.Controller,
 	}
-
 	m.Mount(root, fauxComponent)
+}
+
+func Route(root dom.Node, initial string, routes map[string]Component) {
+	fauxComponents := js.M{}
+	for k, component := range routes {
+		fauxComponents[k] = js.M{
+			"view":       component.View,
+			"controller": component.Controller,
+		}
+	}
+	m.RouteDefine(root, initial, fauxComponents)
 }
