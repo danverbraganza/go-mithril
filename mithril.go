@@ -118,6 +118,11 @@ func Route() string {
 	return m.Call("route").String()
 }
 
+func RouteParam(param string) interface{} {
+	return m.Get("route").Call("param", param).Interface()
+}
+
+
 func RouteConfig() *js.Object {
 	return m.Get("route")
 }
