@@ -61,20 +61,15 @@ func Version() string {
 // Mount takes a Component, converts (or creates) the appropriate mithril
 // representation, and then calls it.
 func Mount(root dom.Node, component Component) {
-	fauxComponent := js.M{
-		"view":       component.View,
-		"controller": component.Controller,
-	}
-	m.Mount(root, fauxComponent)
+	m.Mount(root, wrapComponent(component))
 }
 
+// Route takes a mapping of routes to components, creates the appropriate
+// mithril representation, and then calls it.
 func Route(root dom.Node, initial string, routes map[string]Component) {
 	fauxComponents := js.M{}
 	for k, component := range routes {
-		fauxComponents[k] = js.M{
-			"view":       component.View,
-			"controller": component.Controller,
-		}
+		fauxComponents[k] = wrapComponent(component)
 	}
 	m.RouteDefine(root, initial, fauxComponents)
 }
