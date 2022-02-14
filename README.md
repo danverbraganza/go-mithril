@@ -86,6 +86,8 @@ be gratefully accepted as I able.
 
 ### Changelog
 
+2022-02-14: Migrated to using Go modules for dependency management
+
 2016-04-16: Scrapped RenderWithForce in favour of adding the field to render.
 Loosened some types in Render. Started work on moria, and brought it to enough
 completeness of features so that the Todo app tutorial could be built.
