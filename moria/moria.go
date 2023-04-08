@@ -54,6 +54,7 @@ func (v VirtualElement) View() interface{} {
 	return v.Object
 }
 
+// Version returns the version of the underlying Mithril library.
 func Version() string {
 	return m.Version()
 }
